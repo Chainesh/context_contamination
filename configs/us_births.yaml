@@ -1,0 +1,65 @@
+experiment:
+  name: ccca_pilot_ettm1
+  seed: 0
+  device: cpu
+  batch_size: 64
+
+# data:
+#   name: ETTm1
+#   path: data/raw/ETTm1.csv
+#   time_col: date
+#   target_col: OT
+#   context_length: 512
+#   horizon: 96
+#   stride: 96
+#   train_stride: 48
+#   max_windows: 200
+#   train_fraction: 0.7
+#   val_fraction: 0.1
+#   test_fraction: 0.2
+
+data:
+  name: USBirths
+  path: data/raw/us_births.csv
+  time_col: date
+  target_col: births
+  context_length: 512
+  horizon: 96
+  stride: 7
+  train_stride: 7
+  max_windows: 200
+  train_fraction: 0.7
+  val_fraction: 0.1
+  test_fraction: 0.2
+  period: 7
+
+contamination:
+  mechanisms: [additive_noise, signal_mixing, segment_replacement]
+  recency_values: [0.0, 0.25, 0.5, 0.75, 1.0]
+  span_values: [0.5]
+  distinguishability_values: [0.0, 0.1, 0.2, 0.3, 0.5, 0.75, 1.0]
+  donor_strategy: different_random_window
+
+models:
+  names: [naive, naive_seasonal, linear]
+  ttm:
+    model_path: ibm-granite/granite-timeseries-ttm-r2
+  timesfm:
+    # model_name: google/timesfm-2.5-200m-pytorch
+    # timesfm:
+    model_name: google/timesfm-1.0-200m-pytorch
+  chronos:
+    model_name: amazon/chronos-bolt-base
+  tirex:
+    model_name: NX-AI/TiRex
+  linear:
+    ridge: 10.0
+
+metrics:
+  primary_metric: mae
+  tolerance_percent: 10
+
+outputs:
+  save_predictions: false
+  save_tables: true
+  save_plots: true

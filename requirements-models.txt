@@ -1,0 +1,11 @@
+# Foundation-model backends. All run on CPU.
+# Install AFTER requirements.txt, inside the same environment.
+
+# PyTorch CPU build (skip if you already have torch):
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+# TTM (IBM Granite TinyTimeMixer) — pinned, verified working:
+granite-tsfm @ git+https://github.com/ibm-granite/granite-tsfm.git@v0.2.22
+
+# TimesFM 2.5 (Google) — CPU capable, auto-detects device:
+timesfm[torch]
